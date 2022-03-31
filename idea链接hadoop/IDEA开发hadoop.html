@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>作者:yfs</title>
+</head>
+<body>
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>idea开发hadoop</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+<div class="stackedit__html"><p></p><div class="toc"><h3>IDEA开发hadoop</h3><ul><li><a href="#_1">新建一个项目文件</a></li><li><a href="#pomxml_15">编写pom.xml文件</a></li><li><a href="#_62">编写主函数</a></li><li><a href="#_135">启动集群</a></li><li><a href="#_152">新建日志文件</a></li><li><a href="#_197">上传文件</a></li></ul></div><p></p>
+  <h1><a id="_1"></a>新建一个项目文件</h1>
+  <hr>
+  <p><strong>File- -&gt;  new- -&gt;  project</strong></p>
+  <p><img src="https://img-blog.csdnimg.cn/656dc9522072490c87c1de4946abc852.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAWeaciemBk1k=,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"><br>
+    <strong>选择Maven–&gt; next</strong><br>
+    <img src="https://img-blog.csdnimg.cn/161516ac9e8b43f7bca101bb211772fc.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAWeaciemBk1k=,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"><br>
+    name名字取为testHDFS<br>
+    Location:选择文件保存的位置<br>
+    Artifactid:组织名字为com.qf</p>
+  <p><img src="https://img-blog.csdnimg.cn/959c114c48024135b81805f14006c480.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAWeaciemBk1k=,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"></p>
+  <hr>
+  <h1><a id="pomxml_15"></a>编写pom.xml文件</h1>
+  <p><strong>写pom.xml一定要连接网络!</strong><br>
+    <img src="https://img-blog.csdnimg.cn/735bcced3fca469a804d4ebe54c7a78e.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAWeaciemBk1k=,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"></p>
+  <pre><code class="prism language-xml">
+<span class="token prolog">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>project</span> <span class="token attr-name">xmlns</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>http://maven.apache.org/POM/4.0.0<span class="token punctuation">"</span></span>
+         <span class="token attr-name"><span class="token namespace">xmlns:</span>xsi</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>http://www.w3.org/2001/XMLSchema-instance<span class="token punctuation">"</span></span>
+         <span class="token attr-name"><span class="token namespace">xsi:</span>schemaLocation</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>modelVersion</span><span class="token punctuation">&gt;</span></span>4.0.0<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>modelVersion</span><span class="token punctuation">&gt;</span></span>
+
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">&gt;</span></span>com.qf<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">&gt;</span></span>testHDFS<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">&gt;</span></span>1.0-SNAPSHOT<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">&gt;</span></span>
+
+<span class="token comment">&lt;!--hadoop客户端依赖,该依赖包含hdfs的相关依赖--&gt;</span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependencies</span><span class="token punctuation">&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">&gt;</span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">&gt;</span></span>org.apache.hadoop<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">&gt;</span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">&gt;</span></span>hadoop-client<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">&gt;</span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">&gt;</span></span>2.6.1<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">&gt;</span></span>
+
+<span class="token comment">&lt;!--单元测试依赖--&gt;</span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">&gt;</span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">&gt;</span></span>junit<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">&gt;</span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">&gt;</span></span>junit<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">&gt;</span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">&gt;</span></span>4.12<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">&gt;</span></span>
+
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">&gt;</span></span>
+		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">&gt;</span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">&gt;</span></span>commons-httpclient<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">&gt;</span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">&gt;</span></span>commons-httpclient<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">&gt;</span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">&gt;</span></span>3.1<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependencies</span><span class="token punctuation">&gt;</span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>properties</span><span class="token punctuation">&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>maven.compiler.source</span><span class="token punctuation">&gt;</span></span>1.8<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>maven.compiler.source</span><span class="token punctuation">&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>maven.compiler.target</span><span class="token punctuation">&gt;</span></span>1.8<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>maven.compiler.target</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>properties</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>project</span><span class="token punctuation">&gt;</span></span>
+
+</code></pre>
+  <hr>
+  <h1><a id="_62"></a>编写主函数</h1>
+  <p><strong>在scr下面的main文件夹里新建一个OperateHDFS.java</strong><br>
+    <img src="https://img-blog.csdnimg.cn/484df1d65047489388255a59fbdbecc2.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAWeaciemBk1k=,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"></p>
+  <p>文件内容:</p>
+  <pre><code class="prism language-java"><span class="token keyword">import</span> org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>hadoop<span class="token punctuation">.</span>conf<span class="token punctuation">.</span>Configuration<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>hadoop<span class="token punctuation">.</span>fs<span class="token punctuation">.</span>FSDataInputStream<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>hadoop<span class="token punctuation">.</span>fs<span class="token punctuation">.</span>FSDataOutputStream<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>hadoop<span class="token punctuation">.</span>fs<span class="token punctuation">.</span>FileSystem<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>hadoop<span class="token punctuation">.</span>fs<span class="token punctuation">.</span>Path<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>junit<span class="token punctuation">.</span>Test<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>io<span class="token punctuation">.</span>IOException<span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">OperateHDFS</span> <span class="token punctuation">{</span>
+
+    <span class="token annotation punctuation">@Test</span>
+    <span class="token comment">/*
+     写入数据到HDFS文件
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">writeToHDFS</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> IOException<span class="token punctuation">,</span> IOException <span class="token punctuation">{</span>
+        Configuration conf <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Configuration</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//这条命令是书上没有的，所以要添加这条命令才能运行</span>
+        System<span class="token punctuation">.</span><span class="token function">setProperty</span><span class="token punctuation">(</span><span class="token string">"HADOOP_USER_NAME"</span><span class="token punctuation">,</span> <span class="token string">"root"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        conf<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token string">"fs.defaultFS"</span><span class="token punctuation">,</span> <span class="token string">"hdfs://192.168.154.10:9000"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        FileSystem fs <span class="token operator">=</span> FileSystem<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>conf<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Path p <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Path</span><span class="token punctuation">(</span><span class="token string">"/1.txt"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        FSDataOutputStream fos <span class="token operator">=</span> fs<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span>p<span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token number">1024</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        fos<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span><span class="token string">"hollowed"</span><span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        fos<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Test</span>
+    <span class="token comment">/*
+      读取HDFS文件
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">readHDFSFile</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> IOException <span class="token punctuation">{</span>
+        Configuration conf <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Configuration</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        conf<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token string">"fs.defaultFS"</span><span class="token punctuation">,</span> <span class="token string">"hdfs://192.168.154.10:9000"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        FileSystem fs <span class="token operator">=</span> FileSystem<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>conf<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Path p <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Path</span><span class="token punctuation">(</span><span class="token string">"/2.txt"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        FSDataInputStream fis <span class="token operator">=</span> fs<span class="token punctuation">.</span><span class="token function">open</span><span class="token punctuation">(</span>p<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> buf <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">byte</span><span class="token punctuation">[</span><span class="token number">1024</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+        <span class="token keyword">int</span> len <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>len <span class="token operator">=</span> fis<span class="token punctuation">.</span><span class="token function">read</span><span class="token punctuation">(</span>buf<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+            System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span>buf<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> len<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Test</span>
+    <span class="token comment">/*
+      从windows上传文件到HDFS
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">putFile</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> IOException <span class="token punctuation">{</span>
+        Configuration conf <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Configuration</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span><span class="token function">setProperty</span><span class="token punctuation">(</span><span class="token string">"HADOOP_USER_NAME"</span><span class="token punctuation">,</span> <span class="token string">"root"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        conf<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token string">"fs.defaultFS"</span><span class="token punctuation">,</span> <span class="token string">"hdfs://192.168.154.10:9000"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        FileSystem fs <span class="token operator">=</span> FileSystem<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>conf<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Path p <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Path</span><span class="token punctuation">(</span><span class="token string">"/"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Path p2 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Path</span><span class="token punctuation">(</span><span class="token string">"file:///D:/2.txt"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        fs<span class="token punctuation">.</span><span class="token function">copyFromLocalFile</span><span class="token punctuation">(</span>p2<span class="token punctuation">,</span> p<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        fs<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+</code></pre>
+  <p><strong>上面的地址需要改成自己虚拟机的IP地址</strong></p>
+  <hr>
+  <h1><a id="_135"></a>启动集群</h1>
+  <p>启动Hadoop，使用命令start-all.sh<br>
+    查看集群里有没有/1.txt和/2.txt,如果有的话，查看里面有没有信息</p>
+  <pre><code class="prism language-java">hdfs dfs <span class="token operator">-</span>cat <span class="token operator">/</span><span class="token number">1.</span>txt
+</code></pre>
+  <p>有内容就要把他删了给他一个空值, 在添加一个文件在根目录</p>
+  <pre><code class="prism language-java">hdfs dfs <span class="token operator">-</span>rm <span class="token operator">-</span>r <span class="token operator">/</span><span class="token number">1.</span>txt
+</code></pre>
+  <p>如果没得,添加一个文件进去,如果在Hadoop中有/2.txt文件，要删除.<br>
+    前面一定要把数据全部清除，特别是/1.txt里面的数据为空<br>
+    <img src="https://img-blog.csdnimg.cn/5c580c9143c949dba2271747ee0e90fe.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAWeaciemBk1k=,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"></p>
+  <h1><a id="_152"></a>新建日志文件</h1>
+  <p><strong>在resources文件夹里新建一个log4j.properties文件</strong></p>
+  <p><img src="https://img-blog.csdnimg.cn/edb830cdcfba4c7484e1779252d09495.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAWeaciemBk1k=,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"></p>
+  <pre><code class="prism language-java">### 设置日志级别及日志存储器 ###
+#log4j<span class="token punctuation">.</span>rootLogger<span class="token operator">=</span>DEBUG<span class="token punctuation">,</span> Console
+### 设置日志级别及日志存储器 ###
+log4j<span class="token punctuation">.</span>rootLogger<span class="token operator">=</span>info<span class="token punctuation">,</span>consolePrint<span class="token punctuation">,</span>errorFile<span class="token punctuation">,</span>logFile
+#log4j<span class="token punctuation">.</span>rootLogger<span class="token operator">=</span>DEBUG<span class="token punctuation">,</span>consolePrint<span class="token punctuation">,</span>errorFile<span class="token punctuation">,</span>logFile<span class="token punctuation">,</span>Console
+###  输出到控制台 ###
+log4j<span class="token punctuation">.</span>appender<span class="token punctuation">.</span>consolePrint<span class="token punctuation">.</span>Encoding<span class="token operator">=</span>UTF<span class="token operator">-</span><span class="token number">8</span>
+log4j<span class="token punctuation">.</span>appender<span class="token punctuation">.</span>consolePrint<span class="token operator">=</span>org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>log4j<span class="token punctuation">.</span>ConsoleAppender
+log4j<span class="token punctuation">.</span>appender<span class="token punctuation">.</span>consolePrint<span class="token punctuation">.</span>layout<span class="token operator">=</span>org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>log4j<span class="token punctuation">.</span>PatternLayout
+log4j<span class="token punctuation">.</span>appender<span class="token punctuation">.</span>consolePrint<span class="token punctuation">.</span>layout<span class="token punctuation">.</span>ConversionPattern<span class="token operator">=</span><span class="token operator">%</span>d <span class="token operator">%</span>p <span class="token punctuation">[</span><span class="token operator">%</span>c<span class="token punctuation">]</span> <span class="token operator">-</span> <span class="token operator">%</span>m<span class="token operator">%</span>n
+### 输出到日志文件 ###
+log4j<span class="token punctuation">.</span>appender<span class="token punctuation">.</span>logFile<span class="token punctuation">.</span>Encoding<span class="token operator">=</span>UTF<span class="token operator">-</span><span class="token number">8</span>
+log4j<span class="token punctuation">.</span>appender<span class="token punctuation">.</span>logFile<span class="token operator">=</span>org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>log4j<span class="token punctuation">.</span>DailyRollingFileAppender
+log4j<span class="token punctuation">.</span>appender<span class="token punctuation">.</span>logFile<span class="token punctuation">.</span>File<span class="token operator">=</span>D<span class="token operator">:</span><span class="token operator">/</span>RUN_Data<span class="token operator">/</span>log<span class="token operator">/</span>journal_ok<span class="token punctuation">.</span>log
+log4j<span class="token punctuation">.</span>appender<span class="token punctuation">.</span>logFile<span class="token punctuation">.</span>Append<span class="token operator">=</span><span class="token boolean">true</span>
+log4j<span class="token punctuation">.</span>appender<span class="token punctuation">.</span>logFile<span class="token punctuation">.</span>Threshold<span class="token operator">=</span>info
+log4j<span class="token punctuation">.</span>appender<span class="token punctuation">.</span>logFile<span class="token punctuation">.</span>layout<span class="token operator">=</span>org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>log4j<span class="token punctuation">.</span>PatternLayout
+log4j<span class="token punctuation">.</span>appender<span class="token punctuation">.</span>logFile<span class="token punctuation">.</span>layout<span class="token punctuation">.</span>ConversionPattern<span class="token operator">=</span><span class="token operator">%</span><span class="token operator">-</span>d<span class="token punctuation">{</span>yyyy<span class="token operator">-</span>MM<span class="token operator">-</span>dd HH<span class="token operator">:</span>mm<span class="token operator">:</span>ss<span class="token punctuation">}</span>  <span class="token punctuation">[</span> <span class="token operator">%</span>t<span class="token operator">:</span><span class="token operator">%</span>r <span class="token punctuation">]</span> <span class="token operator">-</span> <span class="token punctuation">[</span> <span class="token operator">%</span>p <span class="token punctuation">]</span>  <span class="token operator">%</span>m<span class="token operator">%</span>n
+### 保存异常信息到单独文件 ###
+log4j<span class="token punctuation">.</span>appender<span class="token punctuation">.</span>errorFile<span class="token punctuation">.</span>Encoding<span class="token operator">=</span>UTF<span class="token operator">-</span><span class="token number">8</span>
+log4j<span class="token punctuation">.</span>appender<span class="token punctuation">.</span>errorFile<span class="token operator">=</span>org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>log4j<span class="token punctuation">.</span>DailyRollingFileAppender
+log4j<span class="token punctuation">.</span>appender<span class="token punctuation">.</span>errorFile<span class="token punctuation">.</span>File<span class="token operator">=</span>D<span class="token operator">:</span><span class="token operator">/</span>RUN_Data<span class="token operator">/</span>log<span class="token operator">/</span>journal_error<span class="token punctuation">.</span>log
+log4j<span class="token punctuation">.</span>appender<span class="token punctuation">.</span>errorFile<span class="token punctuation">.</span>Append<span class="token operator">=</span><span class="token boolean">true</span>
+log4j<span class="token punctuation">.</span>appender<span class="token punctuation">.</span>errorFile<span class="token punctuation">.</span>Threshold<span class="token operator">=</span>ERROR
+log4j<span class="token punctuation">.</span>appender<span class="token punctuation">.</span>errorFile<span class="token punctuation">.</span>layout<span class="token operator">=</span>org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>log4j<span class="token punctuation">.</span>PatternLayout
+log4j<span class="token punctuation">.</span>appender<span class="token punctuation">.</span>errorFile<span class="token punctuation">.</span>layout<span class="token punctuation">.</span>ConversionPattern<span class="token operator">=</span><span class="token operator">%</span><span class="token operator">-</span>d<span class="token punctuation">{</span>yyyy<span class="token operator">-</span>MM<span class="token operator">-</span>dd HH\<span class="token operator">:</span>mm\<span class="token operator">:</span>ss<span class="token punctuation">}</span>  <span class="token punctuation">[</span> <span class="token operator">%</span>t\<span class="token operator">:</span><span class="token operator">%</span>r <span class="token punctuation">]</span> <span class="token operator">-</span> <span class="token punctuation">[</span> <span class="token operator">%</span>p <span class="token punctuation">]</span>  <span class="token operator">%</span>m<span class="token operator">%</span>n
+#Console
+log4j<span class="token punctuation">.</span>appender<span class="token punctuation">.</span>Console<span class="token operator">=</span>org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>log4j<span class="token punctuation">.</span>ConsoleAppender
+log4j<span class="token punctuation">.</span>appender<span class="token punctuation">.</span>Console<span class="token punctuation">.</span>layout<span class="token operator">=</span>org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>log4j<span class="token punctuation">.</span>PatternLayout
+log4j<span class="token punctuation">.</span>appender<span class="token punctuation">.</span>Console<span class="token punctuation">.</span>layout<span class="token punctuation">.</span>ConversionPattern<span class="token operator">=</span><span class="token operator">%</span>d <span class="token punctuation">[</span><span class="token operator">%</span>t<span class="token punctuation">]</span> <span class="token operator">%</span><span class="token operator">-</span><span class="token number">5</span>p <span class="token punctuation">[</span><span class="token operator">%</span>c<span class="token punctuation">]</span> <span class="token operator">-</span> <span class="token operator">%</span>m<span class="token operator">%</span>n
+log4j<span class="token punctuation">.</span>logger<span class="token punctuation">.</span>java<span class="token punctuation">.</span>sql<span class="token punctuation">.</span>ResultSet<span class="token operator">=</span>INFO
+log4j<span class="token punctuation">.</span>logger<span class="token punctuation">.</span>org<span class="token punctuation">.</span>apache<span class="token operator">=</span>INFO
+log4j<span class="token punctuation">.</span>logger<span class="token punctuation">.</span>java<span class="token punctuation">.</span>sql<span class="token punctuation">.</span>Connection<span class="token operator">=</span>DEBUG
+log4j<span class="token punctuation">.</span>logger<span class="token punctuation">.</span>java<span class="token punctuation">.</span>sql<span class="token punctuation">.</span>Statement<span class="token operator">=</span>DEBUG
+log4j<span class="token punctuation">.</span>logger<span class="token punctuation">.</span>java<span class="token punctuation">.</span>sql<span class="token punctuation">.</span>PreparedStatement<span class="token operator">=</span>DEBUG
+#log4j<span class="token punctuation">.</span>logger<span class="token punctuation">.</span>com<span class="token punctuation">.</span>journal<span class="token punctuation">.</span>dao<span class="token operator">=</span>DEBUG<span class="token punctuation">,</span>TRACE
+log4j<span class="token punctuation">.</span>logger<span class="token punctuation">.</span>com<span class="token punctuation">.</span>journal<span class="token punctuation">.</span>dao<span class="token punctuation">.</span>IFollowDao<span class="token operator">=</span>DEBUG
+</code></pre>
+  <hr>
+  <h1><a id="_197"></a>上传文件</h1>
+  <p><strong>在自己的电脑D盘创建一个文本文档2.txt，在里面添加你想写的内容然后执行(点击旁边的绿色运行按钮)</strong></p>
+  <p><img src="https://img-blog.csdnimg.cn/c04b81f5e5724045a14ec147be065461.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAWeaciemBk1k=,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"></p>
+  <p><strong>在执行 OperateHDFS</strong><br>
+    <img src="https://img-blog.csdnimg.cn/bd157ca2a6024cf684e738f0fd6243e9.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAWeaciemBk1k=,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"><br>
+    <img src="https://img-blog.csdnimg.cn/906aa7c61dfd48e2a858b562d50c6db5.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAWeaciemBk1k=,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"><br>
+    当出现文件的内容时就成功了<br>
+    <img src="https://img-blog.csdnimg.cn/ffcccd316b354a31b970fb02b0701c0a.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAWeaciemBk1k=,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"></p>
+</div>
+</body>
+
+</html>
+
+</body>
+</html>
